@@ -8,34 +8,36 @@ require 'clockwork/manager'
 module Clockwork
   extend self
 
-  @@manager = Manager.new
+  def manager
+    @manager ||= Manager.new
+  end
 
   def configure(&block)
-    @@manager.configure(&block)
+    manager.configure(&block)
   end
 
   def handler(&block)
-    @@manager.handler(&block)
+    manager.handler(&block)
   end
 
   def error_handler(&block)
-    @@manager.error_handler(&block)
+    manager.error_handler(&block)
   end
 
   def on(event, options={}, &block)
-    @@manager.on(event, options, &block)
+    manager.on(event, options, &block)
   end
 
   def every(period, job, options={}, &block)
-    @@manager.every(period, job, options, &block)
+    manager.every(period, job, options, &block)
   end
 
   def run
-    @@manager.run
+    manager.run
   end
 
   def clear!
-    @@manager = Manager.new
+    @manager = Manager.new
   end
 
 end
