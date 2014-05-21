@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
-STDERR.sync = STDOUT.sync = true
-
 require 'clockwork'
 require 'optparse'
+
+Clockwork::CLI.setup_sync
 
 begin
   require 'daemons'
