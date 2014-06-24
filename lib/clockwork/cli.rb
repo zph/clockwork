@@ -3,7 +3,7 @@ require 'optparse'
 module Clockwork
   module CLI
 
-    USAGE = 'Usage: clockwork <clock.rb>'
+    USAGE    = 'Usage: clockwork [options] path/to/clock.rb'
     PID_FILE = '/tmp/clockwork.pid'
 
     class << self
@@ -21,7 +21,7 @@ module Clockwork
 
       def traps
         trap('INT') do
-          puts "\rExiting"
+          warn "\rExiting"
           exit
         end
       end
@@ -49,10 +49,10 @@ module Clockwork
         options = {}
 
         opts = OptionParser.new do |opts|
-          opts.banner = "Usage: clockwork [options] path/to/clock.rb"
+          opts.banner = USAGE
 
           opts.on("-p", "--pid-file [FILE]", "PID") do |v|
-            options[:pidfile] = v || Clockwork::CLI::PID_FILE
+            options[:pidfile] = v || PID_FILE
           end
         end
 
