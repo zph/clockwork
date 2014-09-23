@@ -3,6 +3,7 @@ module Clockwork
     class NoHandlerDefined < RuntimeError; end
 
     attr_reader :config
+    attr_accessor :events
 
     def initialize
       @events = []
@@ -51,8 +52,24 @@ module Clockwork
       @callbacks[event].nil? || @callbacks[event].all? { |h| h.call(*args) }
     end
 
-    def run
+    def log_start_line
       log "Starting clock for #{@events.size} events: [ #{@events.map(&:to_s).join(' ')} ]"
+    end
+
+    def register_trap
+      trap('USR1') do
+        warn 'Reloading Configuration File'
+        file = Clockwork::CLI.file(ARGV)
+        @events = []
+        load file
+        warn 'Reload complete'
+        log_start_line
+      end
+    end
+
+    def run
+      register_trap
+      log_start_line
       loop do
         tick
         sleep(config[:sleep_timeout])
